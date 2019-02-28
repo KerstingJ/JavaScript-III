@@ -12,7 +12,7 @@
 // Principle 1
 
 // code example for Window Binding
-console.log(this);
+//console.log(this);
 
 // Principle 2
 
