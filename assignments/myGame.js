@@ -25,6 +25,11 @@ Hero.prototype = Object.create(Character.prototype);
 Hero.prototype.move = function(location){
     this.location = location;
 }
+Hero.prototype.heal = function(){
+    let amt = Math.floor(Math.random() * 20);
+    hero.health += amt;
+    return amt;
+}
 
 function GameMap(){
     Array.call(this);
@@ -71,15 +76,26 @@ function move(gameMap, hero, newLoc){
 }
 
 function combat(hero, enemy){
+    let con = true;
+    let answer = 'f';
     console.log("\n\n\n\n\n")
-    while(hero.health > 0 && enemy.health > 0){
+    while(hero.health > 0 && enemy.health > 0 && con === true){
+        console.clear();
         let heroDmg = Math.floor(Math.random() * hero.strength);
         let enemyDmg = Math.floor(Math.random() * enemy.strength);
-        enemy.health -= heroDmg;
-        console.log(`${hero.name} hit ${enemy.name} for ${heroDmg}`)
+        if (answer === 'h'){
+            console.log(`You healed yourself ${hero.heal()} points. your health is now at ${hero.health}`);
+        } else {
+            enemy.health -= heroDmg;
+            console.log(`${hero.name} hit ${enemy.name} for ${heroDmg}`)
+        }
         hero.health -= enemyDmg;
         console.log(`${enemy.name} hit ${hero.name} for ${enemyDmg}`)
-        
+        if (hero.health > 0){
+            answer = readline.question("Run? or keep fighting?\n" + 
+            `you have ${hero.health} health \ngoblin has ${enemy.health} health left\nr = run f = fight h = heal\n`);
+            con = answer[0].toLowerCase() === 'r'? false : true;
+        }
     }
 
     return hero.health > 0 ? 1 : -1;
@@ -127,7 +143,7 @@ let enemy = new Character({
     name: 'Goblin',
     rep: '0',
     health: 1000,
-    strength: 45,
+    strength: 15,
     defense: 25
 });
 game.addObject(hero);
@@ -137,7 +153,8 @@ let play = true;
 
 while(play === true){
     game.draw();
-    let answer = readline.question('\nWhere do you want to move?\nYou can chain movements as long as you dont run into anything\nex. llrud\n');
+    let answer = readline.question('\nWhere do you want to move?\nYou can chain movements as long as you dont run into anything\nex. l = left, r=right, u=up, d=down\n' +
+    '\'X\' is you \'0\' is the goblin\n');
     answer = answer.split('');
     answer.forEach(x => processMove(x, game, hero, enemy));
 }
