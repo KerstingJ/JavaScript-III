@@ -141,7 +141,7 @@ console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
 class Hero extends Humanoid {
   constructor(attr){
     super(attr)
-    this.strength = attr.strength;
+    this.strength = attr.strength || 1;
   }
 
   heroicAttack(enemy) {
@@ -180,21 +180,42 @@ class Villain extends Humanoid {
   }
 }
 
-const myVillain = new Villain({
+const myHero = new Hero({
   createdAt: new Date(),
   dimensions: {
     length: 1,
+    width: 1,
+    height: 1,
+  },
+  healthPoints: 10,
+  strength: 10,
+  name: 'Papa Smurf',
+  team: 'Forest Kingdom',
+  weapons: [
+    'Friendship',
+    'Knowledge',
+  ],
+  language: 'all'
+});
+
+const myVillain = new Villain({
+  createdAt: new Date(),
+  dimensions: {
+    length: 2,
     width: 2,
     height: 4,
   },
   healthPoints: 10,
-  name: 'Lilith',
-  team: 'Forest Kingdom',
+  name: 'Gargamel',
+  team: 'Giant Jerks',
   weapons: [
-    'Bow',
+    'magic',
     'Dagger',
   ],
-  language: 'Elvish'
+  language: 'hisses and growl'
 });
 
-console.log()
+while(myHero.healthPoints > 0 && myVillain.healthPoints > 0){
+  console.log(myHero.heroicAttack(myVillain));
+  console.log(myVillain.heinousAttack(myHero));
+}
