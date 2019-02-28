@@ -59,7 +59,7 @@ GameMap.prototype.addObject = function(gameObject){
     this[y][x] = gameObject.rep;
 }
 GameMap.prototype.getLocation = function(loc){
-    return this[loc[1] + 1][loc[0] + 1];
+    return this[loc[1] + 1][loc[0] + 1] || [0,0];
 }
 
 function addPoints(loc1, moveTo){
@@ -94,7 +94,7 @@ function combat(hero, enemy){
         if (hero.health > 0){
             answer = readline.question("Run? or keep fighting?\n" + 
             `you have ${hero.health} health \ngoblin has ${enemy.health} health left\nr = run f = fight h = heal\n`);
-            con = answer[0].toLowerCase() === 'r'? false : true;
+            con = (answer[0].toLowerCase() || "") === 'r'? false : true;
         }
     }
 
@@ -102,7 +102,7 @@ function combat(hero, enemy){
 }
 
 function processMove(answer, game, hero, enemy){
-    let newLoc = [0,0];
+    let newLoc = [hero.location[0], hero.location[1]];
     if (answer.toLowerCase() === 'l') {
         newLoc = addPoints(hero.location, [-1, 0]);
     }else if (answer.toLowerCase() === 'r') {
